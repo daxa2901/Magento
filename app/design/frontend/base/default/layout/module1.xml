@@ -1,0 +1,15 @@
+<layout version="0.1.0">
+<module1_grid translate="label">
+        <label>Module1 Success</label>
+        <!-- Mage_Customer -->
+        <!-- <remove name="right"/> -->
+        <!-- <remove name="left"/> -->
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" name="module1_grid" template="module1/grid.phtml"/>
+        </reference>
+    </module1_grid>
+</layout>
