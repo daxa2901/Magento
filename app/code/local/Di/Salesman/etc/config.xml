@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<config>
+	<modules>
+		<Di_salesman>
+			<version>1.0.0</version>
+		</Di_salesman>
+	</modules>
+	<admin>
+		<routers>
+			<salesman>
+				<use>admin</use>
+				<args>
+					<module>Di_Salesman</module>
+					<frontName>salesman</frontName>
+				</args>
+			</salesman>
+		</routers>
+	</admin>
+	<adminhtml>
+		<menu>
+			<salesman module='salesman'>
+				<title>Salesman</title>
+				<sort_order> 40 </sort_order>
+				<children>
+					<items module='salesman'>
+						<title> salesman grid </title>
+						<sort_order> 40 </sort_order>
+						<action>salesman/adminhtml_salesman/index</action>
+					</items>
+				</children>
+			</salesman>
+		</menu>
+		<layout>
+			<updates>
+				<salesman>
+					<file>salesman.xml</file>
+				</salesman>
+			</updates>
+		</layout>
+	</adminhtml>
+	<global>
+		<helpers>
+			<salesman>
+				<class>Di_Salesman_Helper</class>
+			</salesman>
+		</helpers>
+		<blocks>
+			<salesman>
+				<class>Di_Salesman_Block</class>
+			</salesman>
+		</blocks>
+		<models>
+            <salesman>
+                <class>Di_Salesman_Model</class>
+                <resourceModel>salesman_resource</resourceModel>
+            </salesman>
+            <salesman_resource>
+                <class>Di_Salesman_Model_Resource</class>
+                <deprecatedNode>salesman_mysql4</deprecatedNode>
+                <entities>
+                    <salesman>
+                        <table>salesman</table>
+                    </salesman>
+                </entities>
+            </salesman_resource>
+        </models>
+        <resources>
+			<salesman_setup>
+				<setup>
+					<module>Di_Salesman</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</salesman_setup>
+			<salesman_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</salesman_write>
+			<salesman_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</salesman_read>
+		</resources>
+	</global>
+</config>
