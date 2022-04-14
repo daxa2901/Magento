@@ -27,23 +27,29 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Edit_Tab_Form extends Mage_Admi
            'class' => 'required-entry',
            'name' => 'mobile',
        ));
-        $fieldset->addField('status', 'text', array(
+       
+        $fieldset->addField('percentage', 'text', array(
+           'label' => Mage::helper('salesman')->__('Percentage'),
+           'class' => 'required-entry',
+           'name' => 'percentage',
+       ));  
+        $fieldset->addField('status', 'select', array(
            'label' => Mage::helper('salesman')->__('Status'),
            'class' => 'required-entry',
            'name' => 'status',
-       ));
-        $fieldset->addField('createdAt', 'text', array(
-           'label' => Mage::helper('salesman')->__('created At'),
-           'class' => 'required-entry',
-           'name' => 'createdAt',
-       ));
-        $fieldset->addField('updatedAt', 'text', array(
-           'label' => Mage::helper('salesman')->__('updated At'),
-           'class' => 'required-entry',
-           'name' => 'updatedAt',
-       ));
-    
+           'values' => array(
+                array(
+                'value' => 1,
+                'label' => Mage::helper('salesman')->__('Active'),
+                ),
 
+               array(
+                'value' => 0,
+                'label' => Mage::helper('salesman')->__('Inactive'),
+                ),
+             ),
+       ));
+        
         if ( Mage::getSingleton('adminhtml/session')->getProData() )
         {
             $form->setValues(Mage::getSingleton('adminhtml/session')->getProData());

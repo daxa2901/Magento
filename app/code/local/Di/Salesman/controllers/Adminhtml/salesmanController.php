@@ -41,29 +41,56 @@ class Di_Salesman_Adminhtml_salesmanController extends Mage_Adminhtml_Controller
 
     public function saveAction()
     {
-        $postData = $this->getRequest()->getPost();
-        $salesman = Mage::getModel('salesman/salesman');
-        if($this->getRequest()->getParam('id'))
+        try 
         {
-            $postData = array_merge(['salesman_id'=>$this->getRequest()->getParam('id')],$postData);
+            if (!$this->getRequest()->getPost()) 
+            {
+                throw new Exception("Invalid request.", 1);
+            }
+            $postData = $this->getRequest()->getPost();
+            $salesman = Mage::getModel('salesman/salesman');
+            $salesman->setData($postData);
+            $id = $this->getRequest()->getParam('id');
+            if($id)
+            {
+                $salesman->salesman_id = $id;
+                $salesman->updated_at = date('Y-m-d H:i:s');
+            }
+            else
+            {
+                $salesman->created_at = date('Y-m-d H:i:s');
+            }
+            $salesman->save();
+            $this->_redirect('*/*/');
+        } 
+        catch (Exception $e) 
+        {
+            // echo $e->getMessage();
+            $this->_redirect('*/*/');
+            
         }
-        $salesman->setData($postData);
-        $salesman->save();
-        $this->_redirect('*/*/');
     }
 
     public function deleteAction()
     {
-        $id = (int)$this->getRequest()->getParam('id');
-        if($id)
+        try 
         {
-            $salesman = Mage::getModel('salesman/salesman');
-            $load = $salesman->load($id);
-            if($load)
+            $id = (int)$this->getRequest()->getParam('id');
+            if (!$id) 
+            {
+                throw new Exception("Invalid id.", 1);
+            }
+            $salesman = Mage::getModel('salesman/salesman')->load($id);
+            if($salesman)
             {
                 $delete = $salesman->delete();
                 $this->_redirect('*/*/');
             }
+            
+        } 
+        catch (Exception $e) 
+        {
+            $this->_redirect('*/*/');   
         }
     }
 }

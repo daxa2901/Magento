@@ -8,11 +8,11 @@
       `firstName` varchar(64) NOT NULL default '',
       `lastName` varchar(64) NOT NULL default '',
       `email` varchar(64) NOT NULL default '',
-      `mobile` varchar(10) NOT NULL default '',
+      `mobile` bigint(10) NOT NULL default '',
       `percentage` float NOT NULL ,
       `status` varchar(64) NOT NULL default '2',
-      `createdAt` DATETIME NOT NULL ,
-      `updatedAt` DATETIME  NULL ,
+      `created_at` DATETIME NOT NULL ,
+      `updated_at` DATETIME  NULL ,
       PRIMARY KEY (`salseman_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");

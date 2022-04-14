@@ -57,6 +57,11 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Grid extends Mage_Adminhtml_Blo
             'index' => 'mobile',
         ));
 
+        $this->addColumn('percentage', array(
+            'header' => Mage::helper('salesman')->__('percentage'),
+            'index' => 'percentage',
+        ));
+
         $this->addColumn('status', array(
             'header' => Mage::helper('salesman')->__('Status'),
             'index' => 'status',
@@ -64,12 +69,12 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Grid extends Mage_Adminhtml_Blo
 
         $this->addColumn('createdAt', array(
             'header' => Mage::helper('salesman')->__('created At'),
-            'index' => 'createdAt',
+            'index' => 'created_at',
         ));
 
         $this->addColumn('updatedAt', array(
             'header' => Mage::helper('salesman')->__('updated At'),
-            'index' => 'updatedAt',
+            'index' => 'updated_at',
         ));
 
         return parent::_prepareColumns();
