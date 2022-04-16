@@ -20,6 +20,10 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Grid extends Mage_Adminhtml_Blo
     protected function _prepareCollection()
     {
         $collection = Mage::getModel('salesman/salesman')->getCollection();
+        foreach ($collection->getItems() as $key => $value) 
+        {
+            $value->status = Mage::getModel('salesman/salesman')->getStatus($value->status);
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

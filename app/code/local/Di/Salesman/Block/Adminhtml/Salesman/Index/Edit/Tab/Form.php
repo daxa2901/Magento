@@ -44,7 +44,7 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Edit_Tab_Form extends Mage_Admi
                 ),
 
                array(
-                'value' => 0,
+                'value' => 2,
                 'label' => Mage::helper('salesman')->__('Inactive'),
                 ),
              ),
