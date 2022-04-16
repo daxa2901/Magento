@@ -13,6 +13,10 @@ class Di_Product_Block_Adminhtml_Product_Index_Grid extends Mage_Adminhtml_Block
 	protected function _prepareCollection()
 	{
 		$collection= Mage::getModel('product/product')->getCollection();
+		foreach ($collection->getItems() as $key => $value) 
+		{
+			$value->status = Mage::getModel('product/product')->getStatus($value->status);
+		}
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
