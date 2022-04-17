@@ -122,4 +122,26 @@ class Di_Category_Adminhtml_CategoryController extends Mage_Adminhtml_Controller
 		}
 	}
 
+	public function deleteAction()
+	{
+		try 
+        {
+            $id = (int)$this->getRequest()->getParam('id');
+            if (!$id) 
+            {
+                throw new Exception("Invalid id.", 1);
+            }
+            $category = Mage::getModel('category/category')->load($id);
+            if($category)
+            {
+                $delete = $category->delete();
+                $this->_redirect('*/*/');
+            }
+        } 
+        catch (Exception $e) 
+        {
+            $this->_redirect('*/*/');   
+        }
+	}
+
 }
