@@ -546,6 +546,8 @@ final class Mage
             $helperClass = self::getConfig()->getHelperClassName($name);
             self::register($registryKey, new $helperClass);
         }
+        // echo $name;
+        // echo $registryKey;
         return self::registry($registryKey);
     }
 

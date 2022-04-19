@@ -58,6 +58,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ->load();
 
             foreach ($groupCollection as $group) {
+                // echo "<pre>";
+                // print_r($group);
                 $attributes = $product->getAttributes($group->getId(), true);
                 // do not add groups without attributes
 
@@ -70,7 +72,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 if (count($attributes)==0) {
                     continue;
                 }
-
+            
                 $this->addTab('group_'.$group->getId(), array(
                     'label'     => Mage::helper('catalog')->__($group->getAttributeGroupName()),
                     'content'   => $this->_translateHtml($this->getLayout()->createBlock($this->getAttributeTabBlock(),

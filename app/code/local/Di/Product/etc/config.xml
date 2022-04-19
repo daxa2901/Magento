@@ -14,6 +14,14 @@
 					<frontName>product</frontName>
 				</args>
 			</product>
+			<!-- OverWrite Controller -->
+			<!-- <adminhtml>
+				<args>
+					<modules>
+						<Di_Product before="Mage_Adminhtml">Di_Product</Di_Product>
+					</modules>
+				</args>
+			</adminhtml> -->
 		</routers>
 	</admin>
 	<adminhtml>
@@ -39,32 +47,69 @@
 		</layout>
 	</adminhtml>
 	<global>
+		<events>
+            <catalog_product_save_before>
+                <observers>
+                    <product_observer> <!-- it can be anything and must be unique -->
+                        <class>product/observer</class>
+                        <method>callMe</method>
+                    </product_observer>
+                </observers>
+            </catalog_product_save_before> 
+            <product_redirect_before>
+                <observers>
+                    <product_redirect_observer> <!-- it can be anything and must be unique -->
+                        <class>product/observer</class>
+                        <method>beforeRedirect</method>
+                    </product_redirect_observer>
+                </observers>
+            </product_redirect_before>
+        </events>
 		<helpers>
 			<product>
 				<class>Di_Product_Helper</class>
 			</product>
+			<!-- Overwrite Helper -->
+			<!-- <adminhtml>
+				<rewrite>
+					<catalog_product>
+						<data>Di_Product_Helper_Catalog_Data</data>
+					</catalog_product>
+				</rewrite>
+			</adminhtml> -->
 		</helpers>
 		<blocks>
 			<product>
 				<class>Di_Product_Block</class>
 			</product>
+			<!-- Overwrite Block -->
+			<!-- <adminhtml>
+				<rewrite>
+					<catalog_product_grid>Di_Product_Block_Catalog_Product_Grid</catalog_product_grid>
+				</rewrite>
+			</adminhtml> -->
 		</blocks>
 		<models>
-            <product>
-                <class>Di_Product_Model</class>
-                <resourceModel>product_resource</resourceModel>
-            </product>
-            <product_resource>
-                <class>Di_product_Model_Resource</class>
-                <deprecatedNode>product_mysql4</deprecatedNode>
-                <entities>
-                    <product>
-                        <table>product</table>
-                    </product>
-                </entities>
-            </product_resource>
-        </models>
-        <resources>
+			<product>
+				<class>Di_Product_Model</class>
+				<resourceModel>product_resource</resourceModel>
+			</product>
+			<catalog>  <!-- which module want ot overwrite -->
+				<rewrite>
+					<product>Di_Product_Model_Catalog_Product</product>  <!-- <product> name of file -->
+				</rewrite>
+			</catalog>
+			<product_resource>
+				<class>Di_product_Model_Resource</class>
+				<deprecatedNode>product_mysql4</deprecatedNode>
+				<entities>
+					<product>
+						<table>product</table>
+					</product>
+				</entities>
+			</product_resource>
+		</models>
+		<resources>
 			<product_setup>
 				<setup>
 					<module>Di_Product</module>

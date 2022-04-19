@@ -59,6 +59,7 @@ class Di_Product_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
             }
             $product->getFinalPrice();
             $product->save();
+            Mage::dispatchEvent('product_redirect_before', array('product'=>$product));   
             $this->_redirect('*/*/');
         } 
         catch (Exception $e) 

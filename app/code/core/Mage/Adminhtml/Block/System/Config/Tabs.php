@@ -90,13 +90,11 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         foreach ($tabs as $tab) {
             $helperName = $configFields->getAttributeModule($tab);
             $label = Mage::helper($helperName)->__((string)$tab->label);
-
             $this->addTab($tab->getName(), array(
                 'label' => $label,
                 'class' => (string) $tab->class
             ));
         }
-
 
         foreach ($sections as $section) {
             Mage::dispatchEvent('adminhtml_block_system_config_init_tab_sections_before', array('section' => $section));
