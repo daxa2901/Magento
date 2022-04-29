@@ -40,6 +40,20 @@ class Di_Process_Block_Adminhtml_Column_Grid extends Mage_Adminhtml_Block_Widget
 			'index'     => 'name',
 		));   
 
+		$this->addColumn('sample_value', array(
+			'header'    => Mage::helper('process')->__('Sample value'),
+			'align'     =>'right',
+			'width'     => '50px',
+			'index'     => 'sample_value',
+		));   
+
+		$this->addColumn('default_value', array(
+			'header'    => Mage::helper('process')->__('Default Value'),
+			'align'     =>'right',
+			'width'     => '50px',
+			'index'     => 'default_value',
+		));   
+
 		$this->addColumn('process_id', array(
 			'header'    => Mage::helper('process')->__('Process'),
 			'align'     =>'right',

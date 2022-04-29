@@ -107,6 +107,23 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
              'caption'   => $this->__('Export'),
              'url'       => array('base'=> '*/*/export'),
              'field'     => 'id'
+         )
+     ),
+     'filter'    => false,
+     'sortable'  => false,
+     'is_system' => true,
+  ));
+
+  $this->addColumn('download',array(
+     'header'    =>  $this->__('Download Sample'),
+     'width'     => '100',
+     'type'      => 'action',
+     'getter'    => 'getId',
+     'actions'   => array(
+         array(
+             'caption'   => $this->__('Sample File'),
+             'url'       => array('base'=> '*/*/csvDownload'),
+             'field'     => 'id'
          ),
      ),
      'filter'    => false,

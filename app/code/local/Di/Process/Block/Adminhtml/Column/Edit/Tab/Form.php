@@ -27,6 +27,18 @@ class Di_Process_Block_Adminhtml_Column_Edit_Tab_Form extends Mage_Adminhtml_Blo
            'class' => 'required-entry',
            'name' => 'name',
        ));
+
+        $fieldset->addField('sample_value', 'text', array(
+           'label' => Mage::helper('process')->__('Sample value'),
+           'class' => 'required-entry',
+           'name' => 'sample_value',
+       ));
+
+        $fieldset->addField('default_value', 'text', array(
+           'label' => Mage::helper('process')->__('Default Value'),
+           'class' => 'required-entry',
+           'name' => 'default_value',
+       ));
          
         $fieldset->addField('process_id', 'select', array(
            'label' => Mage::helper('process')->__('Process'),

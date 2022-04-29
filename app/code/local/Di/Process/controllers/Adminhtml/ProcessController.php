@@ -62,6 +62,28 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
 		}
 	}
 
+	public function csvDownloadAction()
+	{
+		try {
+			
+			$id = (int)$this->getRequest()->getParam('id');
+			$processModel = Mage::getModel('process/process')->load($id);
+			if (!$processModel->getId()) 
+			{
+				throw new Exception("No record found.", 1);
+			}
+	        $this->_prepareDownloadResponse($processModel->getFileName(), $processModel->downloadSample());
+	        $this->_getSession()->addSuccess($this->__('File downloaded.'));
+			$this->_redirect('*/*/');	
+		} 
+		catch (Exception $e) 
+		{
+			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+			$this->_redirect('*/*/');	
+		}
+   
+	}
+
 	public function newAction()
 	{
 		$this->_forward('edit');
