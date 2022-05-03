@@ -1,5 +1,5 @@
 <?php 
-class Di_Process_Model_Process extends Mage_Core_Model_Abstract
+class Di_Process_Model_Process extends Di_Process_Model_Process_Abstract
 {
 	public function _construct()
 	{
@@ -33,6 +33,23 @@ class Di_Process_Model_Process extends Mage_Core_Model_Abstract
 	{
 		return $this->process;
 	}
+
+	public function setCurrentRow($currentRow)
+    {
+        $this->currentRow = $currentRow;
+        return $this;
+    }
+
+    public function getCurrentRow()
+    {
+        return $this->currentRow;
+    }
+
+    public function getCurrentRowTmp()
+    {
+        return  array_combine(array_keys($this->getCurrentRow()),array_fill(0, count($this->getCurrentRow()), NULL));
+    }
+    
 	protected function setHeaders($headers)
 	{
 		$this->headers = $headers;
@@ -298,9 +315,8 @@ class Di_Process_Model_Process extends Mage_Core_Model_Abstract
     	{
     		try 
     		{
-
-    			$this->validateRow($value);
-    			$this->prepareRow($value);				/////////////////////
+    			$this->_validateRow($value);
+    			$this->_prepareRow($value);				/////////////////////
     		} 
     		catch (Exception $e) 
     		{
@@ -317,27 +333,36 @@ class Di_Process_Model_Process extends Mage_Core_Model_Abstract
     /////////////////////////////////////////////////////////////////////////////////////
     public function prepareRow(&$row)
     {
+    	return [
+    		'name'	=>	$row['Name'],	
+    		'email' =>	$row['Email'],
+    		'mobile' =>	$row['Mobile']
+    	];
+    }
+
+    public function _prepareRow(&$row)
+    {
     	$entry = [
     		'process_id' =>	$this->getProcessId(),
     		'identifier' => $this->getIdentifier($row),
     		'data' 	=> null
     	];
-    	$tableRow = [
-    		'name'	=>	$row['Name'],	
-    		'email' =>	$row['Email'],
-    		'mobile' =>	$row['Mobile']
-    	];
+    	$tableRow =$this->prepareRow($row);
     	$entry['data'] = json_encode($tableRow);
     	$row = $entry;
     }
 
-    protected function validateRow(&$row)
+    public function validateRow($row)
+    {
+    	return $row;
+    }
+    protected function _validateRow(&$row)
     {
     	$this->currentRow = $row;
     	$processColumns = $this->getProcessColumns();
     	$processColumns = array_combine(array_column($processColumns,'name'), $processColumns);
     	$flag = false;
-    	$tempRow = array_combine(array_keys($row),array_fill(0, count($row), NULL));
+    	$tempRow = $this->getCurrentRowTmp();
     	
     	foreach ($this->currentRow as $key => &$value) 
     	{
@@ -365,6 +390,7 @@ class Di_Process_Model_Process extends Mage_Core_Model_Abstract
     		$row = $tempRow;
     		throw new Exception("Invalid Row", 1);
     	}
+    	$this->validateRow($row);
     }
 
     public function validateRowValue($value,$processColumnRow)
