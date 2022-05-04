@@ -104,8 +104,8 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
              'field'     => 'id'
          ), 
          array(
-             'caption'   => $this->__('Export'),
-             'url'       => array('base'=> '*/*/export'),
+             'caption'   => $this->__('Execute'),
+             'url'       => array('base'=> '*/*/execute'),
              'field'     => 'id'
          )
      ),
@@ -131,6 +131,23 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
      'is_system' => true,
   ));
 
+  $this->addColumn('Download',array(
+     'header'    =>  $this->__('Download invalid report'),
+     'width'     => '100',
+     'type'      => 'action',
+     'getter'    => 'getId',
+     'actions'   => array(
+         array(
+             'caption'   => $this->__('Invalid Report'),
+             'url'       => array('base'=> '*/*/invalidReport'),
+             'field'     => 'id'
+         ),
+     ),
+     'filter'    => false,
+     'sortable'  => false,
+     'is_system' => true,
+  ));
+
    return parent::_prepareColumns();
  }
 
@@ -147,6 +164,18 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
     $this->getMassactionBlock()->addItem('delete', array(
      'label'    => Mage::helper('process')->__('Delete'),
      'url'      => $this->getUrl('*/*/massDelete'),
+     'confirm'  => Mage::helper('process')->__('Are you sure?')
+   ));
+
+    $this->getMassactionBlock()->addItem('process', array(
+     'label'    => Mage::helper('process')->__('Processed Entry'),
+     'url'      => $this->getUrl('*/*/massProcess'),
+     'confirm'  => Mage::helper('process')->__('Are you sure?')
+   ));
+
+    $this->getMassactionBlock()->addItem('pending', array(
+     'label'    => Mage::helper('process')->__('Pending Entry'),
+     'url'      => $this->getUrl('*/*/massPending'),
      'confirm'  => Mage::helper('process')->__('Are you sure?')
    ));
 

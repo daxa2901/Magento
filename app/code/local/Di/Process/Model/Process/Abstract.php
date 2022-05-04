@@ -23,6 +23,26 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
     const TYPE_ID_CRON_LBL = 'Cron';
     const TYPE_ID_DEFAULT = 1;
 
+    public function getTypes($key = null)
+    {
+        $types = [
+            self::TYPE_ID_IMPORT => self::TYPE_ID_IMPORT_LBL,
+            self::TYPE_ID_EXPORT => self::TYPE_ID_EXPORT_LBL,
+            self::TYPE_ID_CRON => self::TYPE_ID_CRON_LBL,
+        ];
+
+        if(!$key)
+        {
+            return $types;
+        }
+
+        if (array_key_exists($key,$types)) 
+        {   
+            return $types[$key];
+        }
+        return self::TYPE_ID_DEFAULT;
+    }
+
     public function setProcess($process)
     {
         $this->process = $process;
@@ -213,33 +233,13 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
     }
     
 
-    public function getTypes($key = null)
-    {
-        $types = [
-            self::TYPE_ID_IMPORT => self::TYPE_ID_IMPORT_LBL,
-            self::TYPE_ID_EXPORT => self::TYPE_ID_EXPORT_LBL,
-            self::TYPE_ID_CRON => self::TYPE_ID_CRON_LBL,
-        ];
-
-        if(!$key)
-        {
-            return $types;
-        }
-
-        if (array_key_exists($key,$types)) 
-        {   
-            return $types[$key];
-        }
-        return self::TYPE_ID_DEFAULT;
-    }
-
     public function uploadFile()
     {
         $uploader = new Varien_File_Uploader('file');
         $uploader->setAllowRenameFiles(false)
         ->setAllowedExtensions(['csv'])
         ->setAllowCreateFolders(true);
-        $uploader->save($this->getFilePath(),$this->file_name);
+        $uploader->save($this->getFilePath(),$this->getProcess()->getFileName());
         return true;
     }
 
@@ -257,7 +257,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         $model = Mage::getModel('process/column');
         $select = $model->getCollection()
                   ->getSelect()
-                  ->where('process_id = '.$this->getId());
+                  ->where('process_id = '.$this->getProcess()->getId());
 
         $this->processColumns = $model->getResource()->getReadConnection()->fetchAll($select);
         return $this->processColumns;
@@ -277,15 +277,15 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         return array_filter($requiredColumns);
     }
 
-    public function getColumnsName()
-    {
-        $processColumns = array_map(function ($row)
-        {
-                return $row['name'];
-        }, $this->getProcessColumns());
-        return $processColumns;
+    // public function getColumnsName()
+    // {
+    //     $processColumns = array_map(function ($row)
+    //     {
+    //             return $row['name'];
+    //     }, $this->getProcessColumns());
+    //     return $processColumns;
        
-    }
+    // }
 
     public function validateHeader()
     {
@@ -295,12 +295,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         {
             throw new Exception("Missing header(s) : ".implode(',', $invalidHeaders), 1);
         }
-        $processColumnNameArray = $this->getColumnsName();
-        $extraHeaders = array_diff($this->getHeaders(),$processColumnNameArray);
-        if ($extraHeaders) 
-        {
-            throw new Exception("Extra header(s) : ".implode(',', $extraHeaders), 1);
-        }
+        // $processColumnNameArray = $this->getColumnsName();
+        // $extraHeaders = array_diff($this->getHeaders(),$processColumnNameArray);
+        // if ($extraHeaders) 
+        // {
+        //     throw new Exception("Extra header(s) : ".implode(',', $extraHeaders), 1);
+        // }
         return true;
     }
 
@@ -315,39 +315,33 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         {
             try 
             {
-                $this->validateRow($value);
-                $this->prepareRow($value);              /////////////////////
+                $this->_validateRow($value);
+                $this->_prepareRow($value);              
             } 
             catch (Exception $e) 
             {
-                // $value['error'] = $e->getMessage();
                 $this->addInvalidData($key,$value);
                 unset($data[$key]);
             }
         }
         $this->setDatas($data);
-        print_r($this->getDatas());
 
         return true;
     }
-    /////////////////////////////////////////////////////////////////////////////////////
+
     public function prepareRow(&$row)
     {
-        return [
-            'name'  =>  $row['Name'],   
-            'email' =>  $row['Email'],
-            'mobile' => $row['Mobile']
-        ];
+        return $row;
     }
 
     public function _prepareRow(&$row)
     {
         $entry = [
-            'process_id' => $this->getProcessId(),
+            'process_id' => $this->getProcess()->getProcessId(),
             'identifier' => $this->getIdentifier($row),
             'data'  => null
         ];
-        $tableRow =$this->prepareRow();
+        $tableRow =$this->prepareRow($row);
         $entry['data'] = json_encode($tableRow);
         $row = $entry;
     }
@@ -412,13 +406,21 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
             }
         }
 
+        if ($processColumnRow['type_cast'] == 4) 
+        {
+            if (!$value = (double)$value) 
+            {
+                throw new Exception($value, 1);
+            }
+        }
+
         return $value;
     }
 
     public function readFile()
     {
         $headerFlag = false;
-        $path = $this->getFilePath().$this->getFileName();
+        $path = $this->getFilePath().$this->getProcess()->getFileName();
         $csv = new Varien_File_Csv();
         $csvData = $csv->getData($path);
         $datas = [];
@@ -444,12 +446,11 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         $csv = new Varien_File_Csv();
         $data = $this->getInvalidDatas();
         array_splice($data, 0,0,[$this->getHeaders()]);
-        $csv->saveData($this->getFilePath(). DS .'invalid'. DS .$this->getFileName(),$data);
+        $csv->saveData($this->getFilePath(). DS .'invalid'. DS .$this->getProcess()->getFileName(),$data);
     }
 
     public function processEntries()
     {
-
         $entryModel = Mage::getModel('process/entry');
         $entryModel->getResource()->getReadConnection()->insertMultiple('process_entry',$this->getDatas());
     }
@@ -466,12 +467,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
 
     public function verify()
     {
-        echo "<pre>";
+        // echo "<pre>";
         $this->readFile();
         $this->generateInvalidDataReport();
         $this->processEntries();
-        print_r($this->getDatas());
-        die();
+        // print_r($this->getDatas());
+        // die();
     }
 
     public function getGroupName()
@@ -495,7 +496,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         $model = Mage::getModel('process/column');
         $select = $model->getCollection()
                   ->getSelect()
-                  ->where('process_id = '.$this->getId())
+                  ->where('process_id = '.$this->getProcess()->getId())
                   ->order('sort_order ASC');
         $columns = $model->getResource()->getReadConnection()->fetchAll($select);
         if (!$columns) 
@@ -505,7 +506,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
 
         $io = new Varien_Io_File();
         $path = Mage::getBaseDir('var') . DS . 'export';
-        $name = $this->getFileName();
+        $name = $this->getProcess()->getFileName();
         $file = $path . DS . $name;
         $io->setAllowCreateFolders(true);
         $io->open(array('path' => $path));
@@ -513,7 +514,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
         $io->streamLock(true);
         $finalColumn[] = array_column($columns,'name');
         $finalColumn[] = array_column($columns,'sample_value');
-        $finalColumn[] = array_column($columns,'required');
+        // $finalColumn[] = array_column($columns,'required');
          
         foreach ($finalColumn as $row) 
         {
@@ -527,6 +528,52 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
                 'rm' => '1'
         ];
         return $csv;
+    }
+
+    public function invalidReport()
+    {
+        $path = $this->getFilePath().'invalid'.DS.$this->getProcess()->getFileName();
+        $csv = [
+                'type' => 'filename',
+                'value' => $path,
+                'rm' => '1'
+        ];
+        return $csv;
+    }
+
+    public function execute()
+    {
+        $startDate = date('Y-m-d H:i:s');
+        $entry = Mage::getModel('process/entry');
+        $select = $entry->getCollection()
+                ->getSelect()
+                ->where('process_id = ?',$this->getProcess()->getId())
+                ->where('start_time IS NULL')
+                ->limit($this->getProcess()->getPerRequestCount());
+        $entries = $entry->getResource()->getReadConnection()->fetchAll($select);
+        if (!$entries) 
+        {
+            throw new Exception("No entries found.", 1);
+        }
+        $entryIds = implode(',', array_column($entries, 'entry_id'));
+        $query = "UPDATE `process_entry` SET `start_time` = '{$startDate}' WHERE `entry_id` IN ({$entryIds})";
+        $entry->getResource()->getReadConnection()->fetchAll($query);
+         $this->importEntries($entries);
+
+        $query = "UPDATE `process_entry` SET `end_time` = '{$startDate}' WHERE `entry_id` IN ({$entryIds})";
+        $entry->getResource()->getReadConnection()->fetchAll($query);
+        return $this;
+    }
+
+   public function importEntries($entries)
+    {
+        $model = Mage::getModel('salesman/salesman');
+        foreach ($entries as $key => $entry) 
+        {
+            $model->setData(json_decode($entry['data'], true));
+            $model->created_at = date('Y-m-d H:i:s');
+        }
+        return true;
     }
 
 }  

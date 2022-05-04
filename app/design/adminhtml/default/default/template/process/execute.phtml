@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Processing</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		admin = {
+			execute : function () {
+				console.log('hiii');
+				const self = this;
+				$.ajax({
+					url: "<?php echo Mage::getUrl('process/adminhtml_process/processEntry/'); ?>",
+					type: 'POST',
+					data: jQuery("#myForm").serialize(),
+					dataType: 'json',
+					success: function (data) {
+						console.log(data);
+						jQuery("#message").html(data.message);
+						if(data.status == 'success' && data.reload == true)
+						{
+							window.location.reload();
+						}
+						else if(data.status == 'success' && data.reload == false)
+						{
+							jQuery("#message").html(data.message);
+							self.execute();
+						}
+						else if(data.status == 'failure' && data.reload == true)
+						{
+							alert('Failure');
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+<body>
+	<form action="<?php echo Mage::getUrl('process/adminhtml_process/processEntry/'); ?>" id="myForm" type="POST">
+		<input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+	</form>
+	<h1>Processing</h1>
+	<div id="message"></div>
+	<script type="text/javascript">
+		admin.execute();
+	</script>
+</body>
+</html>
