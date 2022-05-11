@@ -36,7 +36,6 @@ class Di_Process_Block_Adminhtml_Column_Edit_Tab_Form extends Mage_Adminhtml_Blo
 
         $fieldset->addField('default_value', 'text', array(
            'label' => Mage::helper('process')->__('Default Value'),
-           'class' => 'required-entry',
            'name' => 'default_value',
        ));
          

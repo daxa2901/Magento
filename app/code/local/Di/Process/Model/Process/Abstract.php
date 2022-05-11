@@ -316,20 +316,21 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
             try 
             {
                 $this->_validateRow($value);
+
                 $this->_prepareRow($value);              
             } 
             catch (Exception $e) 
             {
-                $this->addInvalidData($key,$value);
+                $this->currentRow['message'] = $e->getMessage();
+                $this->addInvalidData($key,$this->currentRow);
                 unset($data[$key]);
             }
         }
         $this->setDatas($data);
-
         return true;
     }
 
-    public function prepareRow(&$row)
+    public function prepareRowForJson(&$row)
     {
         return $row;
     }
@@ -341,12 +342,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
             'identifier' => $this->getIdentifier($row),
             'data'  => null
         ];
-        $tableRow =$this->prepareRow($row);
+        $tableRow =$this->prepareRowForJson($row);
         $entry['data'] = json_encode($tableRow);
         $row = $entry;
     }
 
-    public function validateRow($row)
+    public function validateRow(&$row)
     {
         return $row;
     }
@@ -414,6 +415,13 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
             }
         }
 
+        if ($processColumnRow['type_cast'] == 1) 
+        {
+            if (!$value = (string)$value) 
+            {
+                throw new Exception($value, 1);
+            }
+        }
         return $value;
     }
 
@@ -438,6 +446,10 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
                 $this->addDatas($key,array_combine($this->getHeaders(), $value));
             }
         }
+        $data= $this->getDatas();
+        $path  = array_column($this->getDatas(), 'path');
+        array_multisort($path,SORT_ASC,SORT_STRING,$data);
+        $this->setDatas($data);
         $this->validateData();
     }
 
@@ -445,14 +457,19 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
     {
         $csv = new Varien_File_Csv();
         $data = $this->getInvalidDatas();
-        array_splice($data, 0,0,[$this->getHeaders()]);
+        $headers = $this->getHeaders();
+        $headers[] = 'message';
+        array_splice($data, 0,0,[$headers]);
         $csv->saveData($this->getFilePath(). DS .'invalid'. DS .$this->getProcess()->getFileName(),$data);
     }
 
     public function processEntries()
     {
         $entryModel = Mage::getModel('process/entry');
-        $entryModel->getResource()->getReadConnection()->insertMultiple('process_entry',$this->getDatas());
+        if ($this->getDatas()) 
+        {
+            $entryModel->getResource()->getReadConnection()->insertOnDuplicate('process_entry',$this->getDatas());
+        }
     }
 
     public function prepareJsonData($row)
@@ -467,7 +484,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
 
     public function verify()
     {
-        // echo "<pre>";
+        echo "<pre>";
         $this->readFile();
         $this->generateInvalidDataReport();
         $this->processEntries();
@@ -567,11 +584,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
 
    public function importEntries($entries)
     {
-        $model = Mage::getModel('salesman/salesman');
+        $salesman = Mage::getModel('salesman/salesman');
         foreach ($entries as $key => $entry) 
         {
-            $model->setData(json_decode($entry['data'], true));
-            $model->created_at = date('Y-m-d H:i:s');
+            $salesman->setData(json_decode($entry['data'], true));
+            $salesman->created_at = date('Y-m-d H:i:s');
+            $salesman->save();
         }
         return true;
     }

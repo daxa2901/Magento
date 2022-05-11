@@ -110,7 +110,8 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
         if (!$entryCount) 
         {
         	Mage::getSingleton('core/session')->unsetProcessEntryVariables();
-            throw new Exception("No Records Available to process.", 1);
+			Mage::getSingleton('adminhtml/session')->addSuccess('All entries processed, no record remaining for rocess.');
+			$this->_redirect('*/*/');	
         }
         $sessionVariables['totalCount'] = $entryCount;
         $sessionVariables['perRequestCount'] = $process->getPerRequestCount();
@@ -162,7 +163,7 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
 			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			$this->_redirect('*/*/');	
 		}
-
+ 
 	}
 	public function csvDownloadAction()
 	{
@@ -329,7 +330,6 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
         {
             try
             {
-
                 foreach ($processIds as $processId)
                 {
                     $process = Mage::getModel('process/process')->load($processId);
@@ -351,6 +351,38 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
         }
             $this->_redirect('*/*/');	
     }
+	
+	public function massDeleteAllEntryAction()
+    {
+    	$processIds = $this->getRequest()->getParam('process');
+         if(!is_array($processIds))
+        {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
+        } 
+        else 
+        {
+            try
+            {
+                foreach ($processIds as $processId)
+                {
+                    $process = Mage::getModel('process/process')->load($processId);
+			    	$adapter = $process->getResource()->getReadConnection();
+	            	$conditions = array(
+	                'process_id = '.$processId, 
+		            );
+			        $result = $adapter->delete('process_entry',$conditions);
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($processIds)));
+            } 
+            catch (Exception $e)
+            {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+            $this->_redirect('*/*/');	
+    }
+	
 	public function massPendingAction()
     {
     	$processIds = $this->getRequest()->getParam('process');

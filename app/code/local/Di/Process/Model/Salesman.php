@@ -3,10 +3,10 @@ class Di_Process_Model_Salesman extends Di_Process_Model_Process_Abstract
 {
 	public function getIdentifier($row)
     {
-        return $row['Email'];
+        return $row['email'];
     }
 
-     public function prepareRow(&$row)
+     public function prepareRowForJson(&$row)
     {
         return [
             'firstName'  =>  $row['firstName'],   

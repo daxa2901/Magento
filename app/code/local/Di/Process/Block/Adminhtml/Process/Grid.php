@@ -97,12 +97,38 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
              'caption'   => $this->__('Upload'),
              'url'       => array('base'=> '*/*/fileUpload'),
              'field'     => 'id'
-         ), 
+         ) 
+    ),
+     'filter'    => false,
+     'sortable'  => false,
+     'is_system' => true,
+  ));
+
+  $this->addColumn('Verify',array(
+     'header'    =>  $this->__('Action'),
+     'width'     => '100',
+     'type'      => 'action',
+     'getter'    => 'getId',
+     'actions'   => array(
          array(
              'caption'   => $this->__('Verify'),
              'url'       => array('base'=> '*/*/verify'),
              'field'     => 'id'
-         ), 
+         ) 
+        
+     ),
+     'filter'    => false,
+     'sortable'  => false,
+     'is_system' => true,
+  ));
+
+  $this->addColumn('Execute',array(
+     'header'    =>  $this->__('Action'),
+     'width'     => '100',
+     'type'      => 'action',
+     'getter'    => 'getId',
+     'actions'   => array(
+        
          array(
              'caption'   => $this->__('Execute'),
              'url'       => array('base'=> '*/*/execute'),
@@ -130,6 +156,7 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
      'sortable'  => false,
      'is_system' => true,
   ));
+
 
   $this->addColumn('Download',array(
      'header'    =>  $this->__('Download invalid report'),
@@ -176,6 +203,12 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
     $this->getMassactionBlock()->addItem('pending', array(
      'label'    => Mage::helper('process')->__('Pending Entry'),
      'url'      => $this->getUrl('*/*/massPending'),
+     'confirm'  => Mage::helper('process')->__('Are you sure?')
+   ));
+
+    $this->getMassactionBlock()->addItem('all_entry', array(
+     'label'    => Mage::helper('process')->__('Delete All Entry'),
+     'url'      => $this->getUrl('*/*/massDeleteAllEntry'),
      'confirm'  => Mage::helper('process')->__('Are you sure?')
    ));
 
