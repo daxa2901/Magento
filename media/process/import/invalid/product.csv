@@ -1,1 +1,2 @@
-"Index","name","price","quantity","sku","tax","cost","discount","discount_mode","status","message"
+"Index","name","price","quantity","sku","tax","cost","discount","discount_mode","status","category_id","message"
+"5","fan","2000","20","fan sku","10","1999","10","Fixed","Active","Electronicsa","Category does not exists."

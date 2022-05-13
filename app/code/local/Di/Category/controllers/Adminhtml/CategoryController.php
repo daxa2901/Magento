@@ -144,4 +144,31 @@ class Di_Category_Adminhtml_CategoryController extends Mage_Adminhtml_Controller
         }
 	}
 
+	public function massDeleteAction() 
+    {
+        $categoryIds = $this->getRequest()->getParam('category');
+         if(!is_array($categoryIds))
+        {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
+        } 
+        else 
+        {
+            try
+            {
+                foreach ($categoryIds as $categoryId)
+                {
+                    $category = Mage::getModel('category/category')->load($categoryId);
+                    $result = $category->delete();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($categoryIds)));
+            } 
+            catch (Exception $e)
+            {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+            $this->_redirect('*/*/');
+    }
+
 }

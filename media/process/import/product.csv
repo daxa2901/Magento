@@ -1,6 +1,7 @@
-Index,name,price,quantity,sku,tax,cost,discount,discount_mode,status
-1,laptop,1000,10,add sku of product,10,1200,10,Fixed,Active
-2,mobile,10000,20,mobile sku,10,9999,10,Percentage,Inactive
-3,tv,40000,20,tv sku,10,35000,10,Fixed,Active
-4,watch,500,20,watch sku,10,450,10,Fixed,Active
-5,fan,2000,20,fan sku,10,1999,10,Fixed,Active
+Index,name,price,quantity,sku,tax,cost,discount,discount_mode,status,category_id
+1,laptop,1000,10,add sku of product,10,1200,10,Fixed,Active,Electronic/It
+2,mobile,10000,20,mobile sku,10,9999,10,Percentage,Inactive,Electronic
+3,tv,40000,20,tv sku,10,35000,10,Fixed,Active,Electronic
+6,watch,500,20,watch sku,10,450,10,Fixed,Active,Electronic
+4,daxa,500,20,watch sku,10,450,10,Fixed,Active,Electronic
+5,fan,2000,20,fan sku,10,1999,10,Fixed,Active,Electronicsa

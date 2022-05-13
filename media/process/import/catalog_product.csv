@@ -1,0 +1,5 @@
+Index,group,user_defined,type,input,label,source,required,name
+1,General,TRUE,varchar,text,Prod Name,,TRUE,prod_name
+2,General,TRUE,varchar,text,prod sku,,TRUE,prod_sku
+3,New,TRUE,int,text,prod quantity,,TRUE,prod_quantity
+4,Prices,TRUE,decimal,text,prod tax,,TRUE,prod_tax

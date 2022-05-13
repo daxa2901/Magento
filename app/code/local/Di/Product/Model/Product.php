@@ -12,6 +12,12 @@ class Di_Product_Model_Product extends Mage_Core_Model_Abstract
 	const STATUS_ENABLED_LBL = 'Active';
 	const STATUS_DISABLED_LBL = 'Inactive';
 	
+	const DISCOUNT_MODE_FIXED = 1;
+	const DISCOUNT_MODE_FIXED_LBL = 'Fixed';
+	const DISCOUNT_MODE_PERCENTAGE = 2;
+	const DISCOUNT_MODE_PERCENTAGE_LBL = 'Percentage';
+	const DISCOUNT_MODE_DEFAULT = 1;
+	
 	public function __construct()
 	{
 		$this->setResourceClassName('Category_Resource');
@@ -35,6 +41,25 @@ class Di_Product_Model_Product extends Mage_Core_Model_Abstract
 			return $statuses[$key];
 		}
 		return self::STATUS_DEFAULT;
+	}
+
+	public function getDiscountMode($key = null)
+	{
+		$discountModes = [
+			self::DISCOUNT_MODE_FIXED => self::DISCOUNT_MODE_FIXED_LBL,
+			self::DISCOUNT_MODE_PERCENTAGE => self::DISCOUNT_MODE_PERCENTAGE_LBL,
+		];
+
+		if(!$key)
+		{
+			return $discountModes;
+		}
+
+		if (array_key_exists($key,$discountModes)) 
+		{	
+			return $discountModes[$key];
+		}
+		return self::DISCOUNT_MODE_DEFAULT;
 	}
 
 

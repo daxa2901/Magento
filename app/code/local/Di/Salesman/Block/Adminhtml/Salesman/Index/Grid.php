@@ -89,4 +89,18 @@ class Di_Salesman_Block_Adminhtml_Salesman_Index_Grid extends Mage_Adminhtml_Blo
         return $this->getUrl('*/*/edit', array('id'=>$row->getId()));
     }
 
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('salesman_id');
+        $this->getMassactionBlock()->setFormFieldName('salesman');
+
+        $this->getMassactionBlock()->addItem('delete', array(
+         'label'    => Mage::helper('salesman')->__('Delete'),
+         'url'      => $this->getUrl('*/*/massDelete'),
+         'confirm'  => Mage::helper('salesman')->__('Are you sure?')
+       ));
+
+       return $this;
+    }
+
 }
