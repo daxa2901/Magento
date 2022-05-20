@@ -446,11 +446,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
                 $this->addDatas($key,array_combine($this->getHeaders(), $value));
             }
         }
-        $data= $this->getDatas();
+        
+        $data = $this->getDatas();
         $path  = array_column($this->getDatas(), 'path');
         array_multisort($path,SORT_ASC,SORT_STRING,$data);
+        // array_multisort($data,SORT_ASC,SORT_STRING);
         $this->setDatas($data);
-        $this->validateData();
     }
 
     public function generateInvalidDataReport()
@@ -486,6 +487,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
     {
         echo "<pre>";
         $this->readFile();
+        $this->validateData();
         $this->generateInvalidDataReport();
         $this->processEntries();
         // print_r($this->getDatas());
@@ -560,7 +562,7 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
 
     public function execute()
     {
-        $startDate = date('Y-m-d H:i:s');
+        $startTime = date('Y-m-d H:i:s');
         $entry = Mage::getModel('process/entry');
         $select = $entry->getCollection()
                 ->getSelect()
@@ -573,11 +575,12 @@ class Di_Process_Model_Process_Abstract extends Mage_Core_Model_Abstract
             throw new Exception("No entries found.", 1);
         }
         $entryIds = implode(',', array_column($entries, 'entry_id'));
-        $query = "UPDATE `process_entry` SET `start_time` = '{$startDate}' WHERE `entry_id` IN ({$entryIds})";
+        $query = "UPDATE `process_entry` SET `start_time` = '{$startTime}' WHERE `entry_id` IN ({$entryIds})";
         $entry->getResource()->getReadConnection()->fetchAll($query);
          $this->importEntries($entries);
 
-        $query = "UPDATE `process_entry` SET `end_time` = '{$startDate}' WHERE `entry_id` IN ({$entryIds})";
+        $endTime = date('Y-m-d H:i:s');
+        $query = "UPDATE `process_entry` SET `end_time` = '{$endTime}' WHERE `entry_id` IN ({$entryIds})";
         $entry->getResource()->getReadConnection()->fetchAll($query);
         return $this;
     }

@@ -60,10 +60,10 @@ class Di_Process_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
   ));   
 
    $this->addColumn('request_interval', array(
-    'header'    => Mage::helper('process')->__('per_request_count'),
+    'header'    => Mage::helper('process')->__('request_interval'),
     'align'     =>'right',
     'width'     => '50px',
-    'index'     => 'per_request_count',
+    'index'     => 'request_interval',
   ));   
 
    $this->addColumn('request_model', array(

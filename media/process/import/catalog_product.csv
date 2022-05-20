@@ -1,0 +1,2 @@
+Index,group,attribute_set,user_defined,type,input,label,source,required,name
+1,New,Custom,1,varchar,text,My Pro Name,,TRUE,my_pro

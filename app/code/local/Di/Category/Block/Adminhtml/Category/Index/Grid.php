@@ -70,4 +70,18 @@ class Di_Category_Block_Adminhtml_Category_Index_Grid extends Mage_Adminhtml_Blo
 	{
 		return $this->getUrl('*/*/edit', array('id'=>$row->getId()));	
 	}
+
+	protected function _prepareMassaction()
+  	{
+    	$this->setMassactionIdField('category_id');
+    	$this->getMassactionBlock()->setFormFieldName('category');
+
+	    $this->getMassactionBlock()->addItem('delete', array(
+	     'label'    => Mage::helper('category')->__('Delete'),
+	     'url'      => $this->getUrl('*/*/massDelete'),
+	     'confirm'  => Mage::helper('category')->__('Are you sure?')
+	   ));
+
+	   return $this;
+	}
 }

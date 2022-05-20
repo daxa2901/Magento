@@ -87,4 +87,18 @@ class Di_Product_Block_Adminhtml_Product_Index_Grid extends Mage_Adminhtml_Block
 	{
 		return $this->getUrl('*/*/edit', array('id'=>$row->getId()));	
 	}
+
+	protected function _prepareMassaction()
+  	{
+    	$this->setMassactionIdField('product_id');
+    	$this->getMassactionBlock()->setFormFieldName('product');
+
+	    $this->getMassactionBlock()->addItem('delete', array(
+	     'label'    => Mage::helper('product')->__('Delete'),
+	     'url'      => $this->getUrl('*/*/massDelete'),
+	     'confirm'  => Mage::helper('product')->__('Are you sure?')
+	   ));
+
+	   return $this;
+	}
 }

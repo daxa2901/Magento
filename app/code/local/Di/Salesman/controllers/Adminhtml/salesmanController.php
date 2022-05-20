@@ -93,4 +93,31 @@ class Di_Salesman_Adminhtml_salesmanController extends Mage_Adminhtml_Controller
             $this->_redirect('*/*/');   
         }
     }
+
+    public function massDeleteAction() 
+    {
+        $salesmanIds = $this->getRequest()->getParam('salesman');
+         if(!is_array($salesmanIds))
+        {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
+        } 
+        else 
+        {
+            try
+            {
+                foreach ($salesmanIds as $salesmanId)
+                {
+                    $salesman = Mage::getModel('salesman/salesman')->load($salesmanId);
+                    $result = $salesman->delete();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($salesmanIds)));
+            } 
+            catch (Exception $e)
+            {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+            $this->_redirect('*/*/');
+    }
 }

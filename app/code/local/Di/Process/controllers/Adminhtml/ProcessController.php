@@ -75,7 +75,10 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
 			{
 				throw new Exception("No record found.", 1);
 			}
-			$this->_prepareProcessEntryVariables($process);
+			if(!$this->_prepareProcessEntryVariables($process))
+			{
+				$this->_redirect('*/*/');	
+			}
 			// $this->_redirect('*/*/processEntry');
 			$this->loadLayout()
 			->_setActiveMenu('process')
@@ -110,8 +113,9 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
         if (!$entryCount) 
         {
         	Mage::getSingleton('core/session')->unsetProcessEntryVariables();
-			Mage::getSingleton('adminhtml/session')->addSuccess('All entries processed, no record remaining for rocess.');
-			$this->_redirect('*/*/');	
+			$this->_getSession()->addSuccess(Mage::helper('process')->__('All records has been processed, No pending record found'));
+			return false;
+			// $this->_redirect('*/*/');	
         }
         $sessionVariables['totalCount'] = $entryCount;
         $sessionVariables['perRequestCount'] = $process->getPerRequestCount();
@@ -119,6 +123,7 @@ class Di_Process_Adminhtml_ProcessController extends Mage_Adminhtml_Controller_A
         $sessionVariables['currentRequest'] = 1;
 
         Mage::getSingleton('core/session')->setProcessEntryVariables($sessionVariables);
+		return true;
 	}
 
 	public function processEntryAction()
