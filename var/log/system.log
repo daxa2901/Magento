@@ -1,0 +1,24 @@
+2022-05-23T04:07:24+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 82: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:07:24+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:07:24+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:16+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:16+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:16+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:37+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:37+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:37+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:47+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:47+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:09:47+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:08+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:08+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:08+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:11+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:11+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:11+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:19+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 81: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:19+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:19+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:45+00:00 ERR (3): Warning: simplexml_load_string(): Entity: line 42: parser error : Extra content at the end of the document  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:45+00:00 ERR (3): Warning: simplexml_load_string(): &lt;/config&gt;/  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
+2022-05-23T04:10:45+00:00 ERR (3): Warning: simplexml_load_string():          ^  in C:\xampp\htdocs\magento\lib\Varien\Simplexml\Config.php on line 510
